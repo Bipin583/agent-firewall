@@ -42,6 +42,17 @@ Each decision is explainable (`explanation`, `matched_policies`,
 
 Requires Python ≥ 3.11.
 
+From PyPI (published as `agent-firewall1` — the plain name was unavailable;
+the CLI command is still `agent-firewall`):
+
+```bash
+pip install agent-firewall1            # core engine + CLI
+pip install "agent-firewall1[api]"     # + optional FastAPI/SQLAlchemy service
+pip install "agent-firewall1[mcp]"     # + optional MCP gateway
+```
+
+Or from a checkout of this repo:
+
 ```bash
 pip install -e .          # core engine + CLI
 pip install -e ".[dev]"   # + pytest, ruff, mypy, hypothesis
