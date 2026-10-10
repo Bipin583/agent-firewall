@@ -22,6 +22,9 @@ api = [
     "SQLAlchemy[asyncio]>=2.0",
     "aiosqlite>=0.19",
 ]
+mcp = [
+    "mcp>=2.1,<3",
+]
 dev = [
     "pytest>=8.0",
     "pytest-cov>=4.1",
@@ -31,6 +34,7 @@ dev = [
     "hypothesis>=6.90",
     "httpx>=0.27",
     "types-PyYAML",
+    "mcp>=2.1,<3",
 ]
 
 [project.scripts]

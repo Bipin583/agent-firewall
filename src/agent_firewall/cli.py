@@ -6,6 +6,7 @@ Subcommands:
   audit show       Print recent audit events.
   policy validate  Validate a policy YAML file against the schema.
   hook             Run the Claude Code PreToolUse hook (reads JSON from stdin).
+  mcp              Run the MCP gateway server (requires the [mcp] extra).
 """
 
 from __future__ import annotations
@@ -89,6 +90,16 @@ def _cmd_hook(_: argparse.Namespace) -> int:
     return hook_main()
 
 
+def _cmd_mcp(args: argparse.Namespace) -> int:
+    try:
+        from .integrations.mcp import run as mcp_run
+    except ModuleNotFoundError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    mcp_run(transport=args.transport)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="agent-firewall", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -117,6 +128,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     hook = sub.add_parser("hook", help="Run the Claude Code PreToolUse hook (stdin).")
     hook.set_defaults(func=_cmd_hook)
+
+    mcp = sub.add_parser("mcp", help="Run the MCP gateway server (requires the [mcp] extra).")
+    mcp.add_argument(
+        "--transport",
+        default="stdio",
+        choices=["stdio", "sse", "streamable-http"],
+        help="MCP transport (default: stdio).",
+    )
+    mcp.set_defaults(func=_cmd_mcp)
 
     return parser
 

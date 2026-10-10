@@ -46,6 +46,7 @@ Requires Python ≥ 3.11.
 pip install -e .          # core engine + CLI
 pip install -e ".[dev]"   # + pytest, ruff, mypy, hypothesis
 pip install -e ".[api]"   # + optional FastAPI/SQLAlchemy service deps
+pip install -e ".[mcp]"   # + optional MCP gateway deps
 ```
 
 The repo also works **without** installing: `hooks/pre_tool_use.py` inserts
@@ -99,6 +100,22 @@ agent-firewall audit verify
 ```
 
 (`agent-firewall hook` runs the same stdin-driven hook adapter directly.)
+
+## Use it as an MCP gateway
+
+The same engine can be exposed as a
+[Model Context Protocol](https://modelcontextprotocol.io) server so any MCP
+client can consult the firewall before running a tool:
+
+```bash
+pip install -e ".[mcp]"
+agent-firewall mcp        # serve over stdio
+```
+
+It registers one tool, `evaluate_tool_request`, that returns an
+`allow` / `ask` / `block` decision for a described request. It is a consultative
+gate — the calling agent must honor the decision. See
+[`docs/mcp-gateway.md`](docs/mcp-gateway.md).
 
 ## Policies
 
@@ -160,6 +177,7 @@ src/agent_firewall/
   policies/           YAML schema, loader, evaluator
   audit/              hash-chained JSONL writer + verifier
   integrations/claude_code/   PreToolUse hook adapter
+  integrations/mcp/           MCP gateway server (optional [mcp] extra)
 hooks/pre_tool_use.py thin stdin entry point for Claude Code
 policies/default.yaml bundled policy set
 docs/limitations.md   threat model & known gaps

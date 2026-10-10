@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **MCP gateway** (`[mcp]` extra): expose the engine as a Model Context Protocol
+  server so any MCP client can consult the firewall before running a tool.
+  Registers an `evaluate_tool_request` tool and ships an `agent-firewall mcp`
+  CLI subcommand plus a `python -m agent_firewall.integrations.mcp` entry point.
+  Documented in `docs/mcp-gateway.md`.
+
 ## [0.1.0] - 2026-10-10
 
 First release.
