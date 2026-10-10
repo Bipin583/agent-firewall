@@ -1,12 +1,19 @@
 name: Release
 
-# Publishes to PyPI via Trusted Publishing (OIDC) when a GitHub Release is
-# published. No API token is stored in the repo. See RELEASING.md for the
-# one-time PyPI "trusted publisher" setup this workflow requires.
+# Publishing uses PyPI Trusted Publishing (OIDC) — no API token is stored.
+#   * Publishing a GitHub Release  -> uploads to PyPI       (environment: pypi)
+#   * Running this workflow manually -> uploads to TestPyPI (environment: testpypi)
+# See RELEASING.md for the one-time "pending publisher" setup each index needs.
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Manual run publishes a dry-run build to TestPyPI"
+        required: false
+        default: "testpypi dry-run"
 
 jobs:
   build:
@@ -29,8 +36,9 @@ jobs:
           name: dist
           path: dist/
 
-  publish:
+  publish-pypi:
     needs: build
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -42,3 +50,20 @@ jobs:
           path: dist/
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-testpypi:
+    needs: build
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write      # required for TestPyPI Trusted Publishing (OIDC)
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

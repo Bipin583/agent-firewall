@@ -26,10 +26,28 @@ Optionally create a matching GitHub **Environment** named `pypi`
 (repo *Settings → Environments*) if you want required reviewers or other
 protection rules on releases.
 
-> For a dry run, you can instead target TestPyPI: add a pending publisher at
-> <https://test.pypi.org> with the same values, and add
-> `repository-url: https://test.pypi.org/legacy/` under the publish step's
-> `with:`.
+## TestPyPI dry-run (recommended first)
+
+You can exercise the whole pipeline against [TestPyPI](https://test.pypi.org)
+before touching real PyPI — the `Release` workflow publishes to TestPyPI when it
+is run **manually** (`workflow_dispatch`).
+
+1. Add a pending publisher at <https://test.pypi.org/manage/account/publishing/>
+   with the same values as above **except the environment name is `testpypi`**:
+   - PyPI project name: `agent-firewall`
+   - Owner: `Bipin583`
+   - Repository name: `agent-firewall`
+   - Workflow name: `release.yml`
+   - Environment name: `testpypi`
+2. Trigger a manual run:
+
+   ```bash
+   gh workflow run Release
+   ```
+
+3. Watch it: `gh run watch "$(gh run list --workflow=Release --limit 1 --json databaseId -q '.[0].databaseId')"`.
+4. Confirm at <https://test.pypi.org/project/agent-firewall/> and, if you like,
+   install it: `pip install -i https://test.pypi.org/simple/ agent-firewall`.
 
 ## Cutting a release
 
