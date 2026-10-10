@@ -52,10 +52,11 @@ def test_bad_content_trust_falls_back_to_unknown() -> None:
     assert decision["decision"] in {"allow", "ask", "block"}
 
 
-@pytest.mark.asyncio
-async def test_build_server_registers_evaluate_tool() -> None:
+def test_build_server_registers_evaluate_tool() -> None:
+    import asyncio
+
     server = build_server()
-    tools = await server.list_tools()
+    tools = asyncio.run(server.list_tools())
     names = {t.name for t in tools}
     assert TOOL_NAME in names
     tool = next(t for t in tools if t.name == TOOL_NAME)
