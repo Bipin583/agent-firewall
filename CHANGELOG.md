@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Registers an `evaluate_tool_request` tool and ships an `agent-firewall mcp`
   CLI subcommand plus a `python -m agent_firewall.integrations.mcp` entry point.
   Documented in `docs/mcp-gateway.md`.
+- PyPI release automation: `.github/workflows/release.yml` publishes to PyPI via
+  Trusted Publishing (OIDC) on GitHub Release; see `RELEASING.md`.
+- `py.typed` marker (PEP 561) so downstream users get the package's type hints.
+
+### Changed
+- Packaging metadata modernized: SPDX `license = "MIT"` + `license-files`,
+  `keywords`, trove `classifiers`, and `[project.urls]`; build backend bumped to
+  `setuptools>=77`.
 
 ## [0.1.0] - 2026-10-10
 

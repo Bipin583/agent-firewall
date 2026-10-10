@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,12 +8,40 @@ version = "0.1.0"
 description = "A runtime security and governance layer that evaluates AI-agent tool requests before they execute."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
-authors = [{ name = "Agent Firewall" }]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Bipin583" }]
+keywords = [
+    "security",
+    "ai-agents",
+    "llm",
+    "guardrails",
+    "policy",
+    "firewall",
+    "mcp",
+    "claude-code",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 dependencies = [
     "pydantic>=2.5",
     "PyYAML>=6.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Bipin583/agent-firewall"
+Repository = "https://github.com/Bipin583/agent-firewall"
+Issues = "https://github.com/Bipin583/agent-firewall/issues"
+Changelog = "https://github.com/Bipin583/agent-firewall/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 api = [
@@ -42,6 +70,9 @@ agent-firewall = "agent_firewall.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+agent_firewall = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
