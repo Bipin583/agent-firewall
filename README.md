@@ -1,5 +1,9 @@
 # Agent Firewall
 
+[![CI](https://github.com/Bipin583/agent-firewall/actions/workflows/ci.yml/badge.svg)](https://github.com/Bipin583/agent-firewall/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A runtime security and governance layer that evaluates **AI-agent tool requests
 before they execute** and returns one of three decisions: `allow`, `ask`
 (require human approval), or `block`.
