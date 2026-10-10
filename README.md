@@ -183,6 +183,13 @@ policies/default.yaml bundled policy set
 docs/limitations.md   threat model & known gaps
 ```
 
+## Contributing & security
+
+Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for the dev
+setup and the quality gate to run before a PR. To report a vulnerability, use
+GitHub private vulnerability reporting as described in
+[`SECURITY.md`](SECURITY.md) (please don't file public issues for security bugs).
+
 ## License
 
 MIT.
