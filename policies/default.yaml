@@ -1,0 +1,63 @@
+# Agent Firewall default policy set.
+# Precedence: deny > approval > allow (see docs/policy-engine.md).
+# Selectors within a policy are ANDed; lists within a selector are ORed.
+version: 1
+
+# When no policy matches, allow known/authorized tools. Unknown tools are handled
+# by the authorization layer (fail-closed), not here.
+default_effect: allow
+
+policies:
+  # --- Hard denials: credential and key material -------------------------------
+  - id: block-protected-credentials
+    description: Never read or write credential/secret files via file tools.
+    effect: deny
+    enabled: true
+    tools: [Read, Write, Edit, MultiEdit]
+    resource_patterns:
+      - "**/.env"
+      - "**/.env.*"
+      - ".env"
+      - ".env.*"
+      - "**/credentials*"
+      - "**/*.pem"
+      - "**/*.key"
+      - "**/id_rsa*"
+      - "**/id_ed25519*"
+      - "**/.ssh/*"
+      - "**/.aws/*"
+      - "**/.git-credentials"
+      - "**/service-account*.json"
+
+  # --- Hard denials: destructive / critical risk ------------------------------
+  - id: block-critical-risk
+    description: >
+      Block any request whose deterministic risk score reaches 85. This is how
+      clearly destructive shell commands (rm -rf /, mkfs, fork bombs) and secret
+      egress get denied: their detectors push the score into this band. Deny wins
+      over every allow (see precedence), so this cannot be scored away.
+    effect: deny
+    enabled: true
+    risk_threshold: 85
+
+  # --- Approval gates ----------------------------------------------------------
+  - id: require-approval-elevated-risk
+    description: Requests scoring >= 50 (but < 85) require human approval.
+    effect: approval
+    enabled: true
+    risk_threshold: 50
+
+  - id: require-approval-network-egress
+    description: Outbound network/transfer tools require approval by default.
+    effect: approval
+    enabled: true
+    tools: [WebFetch]
+    action_types: [network]
+
+  # --- Explicit allows ---------------------------------------------------------
+  - id: allow-project-reads
+    description: Reading non-sensitive files is allowed.
+    effect: allow
+    enabled: true
+    tools: [Read, Glob, Grep]
+    action_types: [read]

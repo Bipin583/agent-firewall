@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-firewall"
+version = "0.1.0"
+description = "A runtime security and governance layer that evaluates AI-agent tool requests before they execute."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Agent Firewall" }]
+dependencies = [
+    "pydantic>=2.5",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "SQLAlchemy>=2.0",
+    "aiosqlite>=0.19",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "coverage>=7.3",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "hypothesis>=6.90",
+    "httpx>=0.27",
+    "types-PyYAML",
+]
+
+[project.scripts]
+agent-firewall = "agent_firewall.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra -q"
+markers = [
+    "live: tests that require a live Claude Code install (skipped by default)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["agent_firewall"]
+mypy_path = "src"
+strict = true
+warn_unused_ignores = true
+ignore_missing_imports = true

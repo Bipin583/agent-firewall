@@ -1,0 +1,19 @@
+{
+  "$comment": "Agent Firewall PreToolUse hook. Safe to commit. Remove this file (or the hooks block) to disable the firewall. The hook makes a local, deterministic decision with no network or database dependency.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Write|Edit|MultiEdit|NotebookEdit|WebFetch|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/hooks/pre_tool_use.py"],
+            "timeout": 10,
+            "statusMessage": "Agent Firewall evaluating tool request"
+          }
+        ]
+      }
+    ]
+  }
+}
