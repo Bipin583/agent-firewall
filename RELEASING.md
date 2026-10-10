@@ -64,7 +64,7 @@ is run **manually** (`workflow_dispatch`).
 
 4. Publishing the release triggers `release.yml`, which builds the sdist +
    wheel, runs `twine check`, and uploads to PyPI through Trusted Publishing.
-5. Confirm the new version at <https://pypi.org/project/agent-firewall/>.
+5. Confirm the new version at <https://pypi.org/project/agent-firewall1/>.
 
 ## Verifying a build locally
 
